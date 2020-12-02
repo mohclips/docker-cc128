@@ -1,0 +1,50 @@
+version: '2.4'
+
+services:
+
+  cc128:
+    image: cc128
+    build: .
+    tty: true
+    container_name: cc128
+    # restart always = if unhealthy re-start the container
+    restart: always
+    # need this to access the usb properly
+    privileged: true
+    devices:
+      # you need to either allow access to all usb devices
+      ##- /dev/bus/usb:/dev/bus/usb
+      # or select them directly
+      - /dev/ttyUSB0:/dev/ttyUSB0
+ 
+    networks:
+      - mysql_network
+ 
+    volumes:
+      - ./cc128.pl:/opt/cc128/cc128.pl
+
+    command: /opt/cc128/cc128.pl
+
+    # # check health here:   docker inspect --format='{{json .State.Health}}' rtl433_weewx | jq .
+    # healthcheck:
+    #   test:
+    #     [
+    #       "CMD-SHELL",
+    #       "/usr/local/bin/healthcheck.sh",
+    #     ]
+    #   interval: 60s
+    #   timeout: 10s
+    #   retries: 3
+    #   # delay long enough for weewx to gather an update and send to WU 
+    #   start_period: 3m
+
+# we have to specify the network subnet as that is what mysql expects the container to connect from
+networks:
+  mysql_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.82.0/24"
+          gateway: "192.168.82.1"
+
