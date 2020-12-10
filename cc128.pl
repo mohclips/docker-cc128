@@ -6,7 +6,7 @@
 use DBI;
 use DBD::mysql;
 
-require 'login_details.pl'
+require '/opt/cc128/login_details.pl';
 $|=1;
 
 $serialport = "/dev/ttyUSB0";
@@ -25,6 +25,7 @@ $DEBUG=0;
 
 our $dbh; # DB handle as GLOBAL VAR
 
+print "$database : $host\n";
 
 #####################################################################################
 

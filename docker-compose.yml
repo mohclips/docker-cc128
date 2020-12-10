@@ -22,6 +22,7 @@ services:
  
     volumes:
       - ./cc128.pl:/opt/cc128/cc128.pl
+      - ./login_details.pl:/opt/cc128/login_details.pl
 
     command: /opt/cc128/cc128.pl
 
